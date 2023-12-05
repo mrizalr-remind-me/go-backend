@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/mrizalr-remind-me/go-backend/internal/model"
 	"github.com/mrizalr-remind-me/go-backend/internal/todo"
 )
@@ -40,4 +41,18 @@ func (h *handler) GetTodos(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusCreated).JSON(todos)
+}
+
+func (h *handler) GetTodo(c *fiber.Ctx) error {
+	todoUUID, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
+	todo, err := h.usecase.GetTodo(todoUUID)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusCreated).JSON(todo)
 }

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/google/uuid"
 	"github.com/mrizalr-remind-me/go-backend/internal/model"
 	"github.com/mrizalr-remind-me/go-backend/internal/todo"
 )
@@ -39,4 +40,8 @@ func (u *usecase) GetTodos() ([]model.Todo, error) {
 	}
 
 	return todos, nil
+}
+
+func (u *usecase) GetTodo(id uuid.UUID) (model.Todo, error) {
+	return u.repository.FindByID(id)
 }

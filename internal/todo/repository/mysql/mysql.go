@@ -33,6 +33,9 @@ func (r *repository) FindByID(id uuid.UUID) (model.Todo, error) {
 
 	todo := new(model.Todo)
 	err = nstmt.QueryRow(params).StructScan(todo)
+	if err != nil {
+		return model.Todo{}, fmt.Errorf("error scanning query result - %v", err)
+	}
 	return *todo, nil
 }
 
