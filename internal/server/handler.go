@@ -1,15 +1,21 @@
 package server
 
 import (
-	"net/http"
-
-	"github.com/gofiber/fiber/v2"
+	"github.com/mrizalr-remind-me/go-backend/internal/todo/api"
+	"github.com/mrizalr-remind-me/go-backend/internal/todo/repository/mysql"
+	"github.com/mrizalr-remind-me/go-backend/internal/todo/usecase"
 )
 
 func (s *server) SetupHandler() {
-	s.App.Get("health", func(c *fiber.Ctx) error {
-		return c.
-			Status(http.StatusOK).
-			JSON(fiber.Map{"status": "ok"})
-	})
+	setupTodo(s)
+}
+
+func setupTodo(s *server) {
+	todoRepository := mysql.New(s.DB)
+	todoUsecase := usecase.New(todoRepository)
+	todoHandler := api.New(todoUsecase)
+
+	v1 := s.App.Group("v1")
+	todoRoute := v1.Group("/todos")
+	todoHandler.SetupRoutes(todoRoute)
 }
