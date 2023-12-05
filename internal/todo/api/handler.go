@@ -56,3 +56,23 @@ func (h *handler) GetTodo(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusCreated).JSON(todo)
 }
+
+func (h *handler) UpdateTodo(c *fiber.Ctx) error {
+	todoUUID, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
+	payload := new(model.Todo)
+	err = c.BodyParser(payload)
+	if err != nil {
+		return err
+	}
+
+	todo, err := h.usecase.UpdateTodo(todoUUID, *payload)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusCreated).JSON(todo)
+}

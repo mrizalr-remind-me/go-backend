@@ -91,3 +91,29 @@ func (r *repository) FindTodos() ([]model.Todo, error) {
 
 	return todos, nil
 }
+
+func (r *repository) UpdateTodo(id uuid.UUID, todo model.Todo) error {
+	query := `UPDATE todo
+	SET
+		title = :title,
+		description = :description,
+		remind_at = :remind_at,
+		updated_at = :updated_at
+	WHERE id = :id`
+
+	params := map[string]any{
+		"id":          id,
+		"title":       todo.Title,
+		"description": todo.Description,
+		"remind_at":   todo.RemindAt,
+		"updated_at":  todo.UpdatedAt,
+	}
+
+	nstmt, err := r.DB.PrepareNamed(query)
+	if err != nil {
+		return fmt.Errorf("error preparing query - %v", err)
+	}
+
+	_, err = nstmt.Exec(params)
+	return err
+}

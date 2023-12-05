@@ -45,3 +45,19 @@ func (u *usecase) GetTodos() ([]model.Todo, error) {
 func (u *usecase) GetTodo(id uuid.UUID) (model.Todo, error) {
 	return u.repository.FindByID(id)
 }
+
+func (u *usecase) UpdateTodo(id uuid.UUID, todo model.Todo) (model.Todo, error) {
+	_, err := u.GetTodo(id)
+	if err != nil {
+		return model.Todo{}, err
+	}
+
+	todo.Update()
+
+	err = u.repository.UpdateTodo(id, todo)
+	if err != nil {
+		return model.Todo{}, err
+	}
+
+	return u.GetTodo(id)
+}
