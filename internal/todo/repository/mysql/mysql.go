@@ -117,3 +117,19 @@ func (r *repository) UpdateTodo(id uuid.UUID, todo model.Todo) error {
 	_, err = nstmt.Exec(params)
 	return err
 }
+
+func (r *repository) DeleteTodo(id uuid.UUID) error {
+	query := `DELETE
+	FROM todo
+	WHERE id = :id`
+
+	params := map[string]any{"id": id}
+
+	nstmt, err := r.DB.PrepareNamed(query)
+	if err != nil {
+		return fmt.Errorf("error preparing query - %v", err)
+	}
+
+	_, err = nstmt.Exec(params)
+	return err
+}

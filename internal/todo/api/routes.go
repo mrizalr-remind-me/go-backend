@@ -7,4 +7,5 @@ func (h *handler) SetupRoutes(r fiber.Router) {
 	r.Get("", h.GetTodos)
 	r.Post("", h.CreateTodo)
 	r.Put("/:id", h.UpdateTodo)
+	r.Delete("/:id", h.DeleteTodo)
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -40,7 +41,7 @@ func (h *handler) GetTodos(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(http.StatusCreated).JSON(todos)
+	return c.Status(http.StatusOK).JSON(todos)
 }
 
 func (h *handler) GetTodo(c *fiber.Ctx) error {
@@ -54,7 +55,7 @@ func (h *handler) GetTodo(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(http.StatusCreated).JSON(todo)
+	return c.Status(http.StatusOK).JSON(todo)
 }
 
 func (h *handler) UpdateTodo(c *fiber.Ctx) error {
@@ -74,5 +75,19 @@ func (h *handler) UpdateTodo(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.Status(http.StatusCreated).JSON(todo)
+	return c.Status(http.StatusOK).JSON(todo)
+}
+
+func (h *handler) DeleteTodo(c *fiber.Ctx) error {
+	todoUUID, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
+	err = h.usecase.DeleteTodo(todoUUID)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{"message": fmt.Sprintf("todo with id %s successfully deleted", todoUUID.String())})
 }

@@ -61,3 +61,12 @@ func (u *usecase) UpdateTodo(id uuid.UUID, todo model.Todo) (model.Todo, error) 
 
 	return u.GetTodo(id)
 }
+
+func (u *usecase) DeleteTodo(id uuid.UUID) error {
+	_, err := u.repository.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	return u.repository.DeleteTodo(id)
+}
