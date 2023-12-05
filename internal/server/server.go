@@ -5,15 +5,18 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/jmoiron/sqlx"
 )
 
 type server struct {
 	App *fiber.App
+	DB  *sqlx.DB
 }
 
-func New() *server {
+func New(db *sqlx.DB) *server {
 	return &server{
 		App: fiber.New(),
+		DB:  db,
 	}
 }
 
