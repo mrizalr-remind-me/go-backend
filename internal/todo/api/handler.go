@@ -18,19 +18,17 @@ func New(usecase todo.Usecase) *handler {
 	}
 }
 
-func (h *handler) CreateTodo() fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		payload := new(model.Todo)
-		err := c.BodyParser(payload)
-		if err != nil {
-			return err
-		}
-
-		createdTodo, err := h.usecase.CreateTodo(*payload)
-		if err != nil {
-			return err
-		}
-
-		return c.Status(http.StatusCreated).JSON(createdTodo)
+func (h *handler) CreateTodo(c *fiber.Ctx) error {
+	payload := new(model.Todo)
+	err := c.BodyParser(payload)
+	if err != nil {
+		return err
 	}
+
+	createdTodo, err := h.usecase.CreateTodo(*payload)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusCreated).JSON(createdTodo)
 }
