@@ -31,3 +31,12 @@ func (u *usecase) CreateTodo(todo model.Todo) (model.Todo, error) {
 	return createdTodo, nil
 
 }
+
+func (u *usecase) GetTodos() ([]model.Todo, error) {
+	todos, err := u.repository.FindTodos()
+	if err != nil {
+		return []model.Todo{}, err
+	}
+
+	return todos, nil
+}

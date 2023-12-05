@@ -32,3 +32,12 @@ func (h *handler) CreateTodo(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusCreated).JSON(createdTodo)
 }
+
+func (h *handler) GetTodos(c *fiber.Ctx) error {
+	todos, err := h.usecase.GetTodos()
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusCreated).JSON(todos)
+}

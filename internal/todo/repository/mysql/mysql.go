@@ -56,3 +56,35 @@ func (r *repository) CreateTodo(todo model.Todo) error {
 	_, err = nstmt.Exec(params)
 	return err
 }
+
+func (r *repository) FindTodos() ([]model.Todo, error) {
+	query := `SELECT id, title, description, remind_at, created_at, updated_at
+	FROM todo`
+
+	stmt, err := r.DB.Prepare(query)
+	if err != nil {
+		return nil, fmt.Errorf("error preparing query - %v", err)
+	}
+
+	todos := []model.Todo{}
+	rows, err := stmt.Query()
+	for rows.Next() {
+		todo := model.Todo{}
+		err := rows.Scan(
+			&todo.ID,
+			&todo.Title,
+			&todo.Description,
+			&todo.RemindAt,
+			&todo.CreatedAt,
+			&todo.UpdatedAt,
+		)
+
+		if err != nil {
+			return nil, fmt.Errorf("error scanning query result - %v", err)
+		}
+
+		todos = append(todos, todo)
+	}
+
+	return todos, nil
+}

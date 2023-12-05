@@ -8,7 +8,9 @@ import (
 type Repository interface {
 	FindByID(id uuid.UUID) (model.Todo, error)
 	CreateTodo(todo model.Todo) error
+	FindTodos() ([]model.Todo, error)
 }
 type Usecase interface {
 	CreateTodo(todo model.Todo) (model.Todo, error)
+	GetTodos() ([]model.Todo, error)
 }
