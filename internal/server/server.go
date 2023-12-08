@@ -23,7 +23,7 @@ func New(db *sqlx.DB) *server {
 func (s *server) Run() error {
 	s.SetupHandler()
 
-	port := os.Getenv("SERVER_PORT")
+	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8080"
 	}
